@@ -1,15 +1,22 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { glob } from 'glob';
 import injectHTML from 'vite-plugin-html-inject';
 import FullReload from 'vite-plugin-full-reload';
 import SortCss from 'postcss-sort-media-queries';
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
+  const envDir = process.cwd();
+  const envPrefix = 'VITE_';
+  const env = loadEnv(mode, envDir, envPrefix);
+
   return {
     define: {
       [command === 'serve' ? 'global' : '_global']: {},
+      __ENV__: env,
     },
     root: 'src',
+    envDir: envDir,
+    envPrefix: envPrefix,
     build: {
       sourcemap: true,
       rollupOptions: {
