@@ -1,22 +1,8 @@
-const apiKey = import.meta.env.VITE_API_KEY;
-const BASE_URL = 'https://pixabay.com/api/';
+import { createdGalleryCardTemplate } from './js/render-functions';
+import { fetchPhotosByQuery } from './js/pixabay-api';
 
 const searchFormEl = document.querySelector('.js-form');
 const galleryEl = document.querySelector('.js-gallery');
-
-export const createdGalleryCardTemplate = imgInfo => {
-  return `
-    <li class="gallery-item">
-      <a class="gallery-link" href="${imgInfo.largeImageURL}">
-        <img
-          class="gallery-image"
-          src="${imgInfo.webformatURL}"
-          alt=""
-        />
-      </a>
-    </li>
-  `;
-};
 
 const onSearchFormSubmit = event => {
   event.preventDefault();
@@ -29,18 +15,7 @@ const onSearchFormSubmit = event => {
     return;
   }
 
-  console.log(searchedQuery);
-
-  fetch(
-    `${BASE_URL}?key=${apiKey}&q=${searchedQuery}&image_type=photo&orientation=horizontal&safesearch=true`
-  )
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-
-      return response.json();
-    })
+  fetchPhotosByQuery(searchedQuery)
     .then(data => {
       if (data.total === 0) {
         alert(
@@ -58,14 +33,11 @@ const onSearchFormSubmit = event => {
         .map(el => createdGalleryCardTemplate(el))
         .join('');
 
-      console.log(galleryTemplate);
       galleryEl.innerHTML = galleryTemplate;
     })
     .catch(err => {
       console.log(err);
     });
 };
-
-console.log(galleryEl);
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
