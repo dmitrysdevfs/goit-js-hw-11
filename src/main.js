@@ -5,12 +5,12 @@ import iziToast from 'izitoast';
 
 const searchFormEl = document.querySelector('.js-form');
 const galleryEl = document.querySelector('.js-gallery');
+const loaderEl = document.querySelector('.loader-wrapper');
 
 const toastSettings = {
   messageSize: '16',
   messageColor: 'white',
   backgroundColor: 'red',
-  // color: 'red',
   position: 'topRight',
   icon: 'fa-regular fa-circle-xmark',
   progressBar: false,
@@ -33,6 +33,9 @@ const onSearchFormSubmit = event => {
     return;
   }
 
+  showLoader();
+  galleryEl.innerHTML = '';
+
   fetchPhotosByQuery(searchedQuery)
     .then(data => {
       if (data.total === 0) {
@@ -46,10 +49,12 @@ const onSearchFormSubmit = event => {
 
         searchFormEl.reset();
 
+        hideLoader();
+
         return;
       }
 
-      const galleryTemplate = data.hits
+      const galleryTemplate = data?.hits
         .map(el => createdGalleryCardTemplate(el))
         .join('');
 
@@ -59,14 +64,25 @@ const onSearchFormSubmit = event => {
 
       let lightbox = new SimpleLightbox('.gallery a', {
         captionsData: 'alt',
-        captionDellay: 250,
+        captionDelay: 250,
       });
 
       lightbox.refresh();
     })
     .catch(err => {
       console.log(err);
+    })
+    .finally(() => {
+      hideLoader();
     });
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
+
+function showLoader() {
+  loaderEl.style.display = 'flex';
+}
+
+function hideLoader() {
+  loaderEl.style.display = 'none';
+}
