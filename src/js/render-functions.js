@@ -1,4 +1,8 @@
 export const createdGalleryCardTemplate = imgInfo => {
+  const uniqueTags = [
+    ...new Set(imgInfo.tags.split(',').map(tag => tag.trim())),
+  ].join(', ');
+
   return `
     <li class="gallery-item">
       <a class="gallery-link" href="${imgInfo.largeImageURL}">
@@ -6,7 +10,7 @@ export const createdGalleryCardTemplate = imgInfo => {
           <img
             class="gallery-image"
             src="${imgInfo.webformatURL}"
-            alt="${imgInfo.tags}"
+            alt="${uniqueTags}"
           />
           <figcaption class="image-stats">
             <div class="stat-item">
