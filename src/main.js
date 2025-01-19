@@ -1,5 +1,6 @@
 import { createdGalleryCardTemplate } from './js/render-functions';
 import { fetchPhotosByQuery } from './js/pixabay-api';
+import SimpleLightbox from 'simplelightbox';
 
 const searchFormEl = document.querySelector('.js-form');
 const galleryEl = document.querySelector('.js-gallery');
@@ -34,6 +35,13 @@ const onSearchFormSubmit = event => {
         .join('');
 
       galleryEl.innerHTML = galleryTemplate;
+
+      let lightbox = new SimpleLightbox('.gallery a', {
+        captionsData: 'alt',
+        captionDellay: 250,
+      });
+
+      lightbox.refresh();
     })
     .catch(err => {
       console.log(err);

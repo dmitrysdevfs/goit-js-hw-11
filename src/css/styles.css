@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+@import 'simplelightbox/dist/simple-lightbox.min.css';
+
 /* @import 'izitoast/dist/css/iziToast.min.css'; */
 /**
   |============================
@@ -102,4 +104,8 @@ body {
   margin: 4px 0 0;
 
   color: var(--primary-color);
+}
+
+.sl-overlay {
+  background-color: rgba(46, 47, 66, 0.8) !important;
 }
